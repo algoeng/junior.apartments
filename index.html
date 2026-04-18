@@ -1,60 +1,602 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Junior Apartments | junior.apartments</title>
-    <meta
-      name="description"
-      content="Junior Apartments is a static website hosted at junior.apartments."
-    />
-    <style>
-      :root {
-        color-scheme: light;
-        font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Junior Apartments | Seattle Living in the Central District</title>
+  <meta name="description" content="Junior Apartments — modern living at 507 22nd Ave in Seattle's Central District. View available listings, pay rent, and submit maintenance requests." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-      body {
-        margin: 0;
-        min-height: 100vh;
-        display: grid;
-        place-items: center;
-        background: linear-gradient(140deg, #f8fafc, #e2e8f0);
-        color: #0f172a;
-      }
+    :root {
+      --color-dark: #1a1a2e;
+      --color-accent: #c9a96e;
+      --color-accent-hover: #b8943d;
+      --color-light: #f8f6f1;
+      --color-white: #ffffff;
+      --color-text: #3a3a4a;
+      --color-muted: #7a7a8a;
+      --font-serif: 'Playfair Display', Georgia, serif;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
 
-      main {
-        width: min(680px, 92vw);
-        background: #ffffff;
-        border-radius: 14px;
-        box-shadow: 0 12px 40px rgba(15, 23, 42, 0.08);
-        padding: 2.5rem;
-      }
+    html { scroll-behavior: smooth; }
 
-      h1 {
-        margin: 0 0 0.75rem;
-        font-size: clamp(1.9rem, 4vw, 2.4rem);
-      }
+    body {
+      font-family: var(--font-sans);
+      color: var(--color-text);
+      background: var(--color-white);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
 
-      p {
-        margin: 0;
-        line-height: 1.6;
-      }
+    /* ── NAV ── */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 3rem;
+      transition: background .35s, box-shadow .35s, padding .35s;
+    }
+    .nav.scrolled {
+      background: rgba(26, 26, 46, .95);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 2px 20px rgba(0,0,0,.15);
+      padding: .7rem 3rem;
+    }
+    .nav-logo {
+      font-family: var(--font-serif);
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--color-white);
+      text-decoration: none;
+      letter-spacing: .5px;
+    }
+    .nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
+    .nav-links a {
+      color: rgba(255,255,255,.85);
+      text-decoration: none;
+      font-size: .85rem;
+      font-weight: 500;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--color-accent); }
+    .nav-login {
+      background: var(--color-accent);
+      color: var(--color-dark) !important;
+      padding: .55rem 1.4rem;
+      border-radius: 4px;
+      font-weight: 600 !important;
+      transition: background .2s, transform .2s;
+    }
+    .nav-login:hover { background: var(--color-accent-hover); transform: translateY(-1px); }
 
-      .domain {
-        margin-top: 1rem;
-        display: inline-block;
-        font-weight: 600;
+    .nav-toggle { display: none; background: none; border: none; cursor: pointer; padding: .5rem; }
+    .nav-toggle span { display: block; width: 24px; height: 2px; background: #fff; margin: 5px 0; transition: .3s; }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: url('img/junior_apartments.png') center/cover no-repeat;
+    }
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(26,26,46,.55) 0%, rgba(26,26,46,.7) 100%);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 750px;
+      padding: 2rem;
+    }
+    .hero-tagline {
+      font-family: var(--font-sans);
+      font-size: .85rem;
+      font-weight: 500;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: 1.2rem;
+    }
+    .hero-title {
+      font-family: var(--font-serif);
+      font-size: clamp(2.8rem, 6vw, 4.5rem);
+      font-weight: 700;
+      color: var(--color-white);
+      line-height: 1.1;
+      margin-bottom: 1.2rem;
+    }
+    .hero-sub {
+      font-size: 1.15rem;
+      color: rgba(255,255,255,.8);
+      font-weight: 300;
+      max-width: 550px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.7;
+    }
+    .hero-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-block;
+      padding: .85rem 2.2rem;
+      border-radius: 4px;
+      font-size: .9rem;
+      font-weight: 600;
+      text-decoration: none;
+      letter-spacing: .5px;
+      transition: all .25s;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-primary {
+      background: var(--color-accent);
+      color: var(--color-dark);
+    }
+    .btn-primary:hover { background: var(--color-accent-hover); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(201,169,110,.4); }
+    .btn-outline {
+      background: transparent;
+      color: var(--color-white);
+      border: 1.5px solid rgba(255,255,255,.5);
+    }
+    .btn-outline:hover { border-color: var(--color-accent); color: var(--color-accent); }
+    .scroll-indicator {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      animation: bounce 2s infinite;
+    }
+    .scroll-indicator svg { width: 28px; height: 28px; stroke: rgba(255,255,255,.5); fill: none; stroke-width: 2; }
+    @keyframes bounce { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(8px); } }
+
+    /* ── SECTIONS ── */
+    section { padding: 6rem 2rem; }
+    .section-header { text-align: center; max-width: 600px; margin: 0 auto 3.5rem; }
+    .section-label {
+      font-size: .78rem;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: .6rem;
+    }
+    .section-title {
+      font-family: var(--font-serif);
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      color: var(--color-dark);
+      margin-bottom: .8rem;
+    }
+    .section-desc { color: var(--color-muted); font-size: 1rem; }
+
+    /* ── QUICK LINKS (TENANT HUB) ── */
+    .quick-links { background: var(--color-light); }
+    .ql-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .ql-card {
+      background: var(--color-white);
+      border-radius: 10px;
+      padding: 2.2rem 1.8rem;
+      text-align: center;
+      text-decoration: none;
+      color: var(--color-text);
+      box-shadow: 0 4px 20px rgba(0,0,0,.05);
+      transition: transform .25s, box-shadow .25s;
+    }
+    .ql-card:hover { transform: translateY(-5px); box-shadow: 0 12px 35px rgba(0,0,0,.1); }
+    .ql-icon { font-size: 2.2rem; margin-bottom: 1rem; }
+    .ql-card h3 { font-family: var(--font-serif); font-size: 1.15rem; margin-bottom: .5rem; color: var(--color-dark); }
+    .ql-card p { font-size: .88rem; color: var(--color-muted); line-height: 1.5; }
+
+    /* ── GALLERY ── */
+    .gallery-section { background: var(--color-white); }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: .5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .gallery-grid a {
+      overflow: hidden;
+      border-radius: 6px;
+      aspect-ratio: 4/3;
+      display: block;
+    }
+    .gallery-grid a:first-child { grid-column: span 2; grid-row: span 2; aspect-ratio: auto; }
+    .gallery-grid img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .4s;
+      display: block;
+    }
+    .gallery-grid a:hover img { transform: scale(1.05); }
+
+    /* ── LISTINGS ── */
+    .listings { background: var(--color-light); }
+    .listings-embed {
+      max-width: 1000px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .listings-embed iframe {
+      width: 100%;
+      height: 600px;
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.08);
+    }
+    .listings-note {
+      margin-top: 1.5rem;
+      font-size: .9rem;
+      color: var(--color-muted);
+    }
+    .listings-note a { color: var(--color-accent); text-decoration: none; }
+    .listings-note a:hover { text-decoration: underline; }
+
+    /* ── ABOUT ── */
+    .about { background: var(--color-white); }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      align-items: center;
+    }
+    .about-img { border-radius: 10px; overflow: hidden; }
+    .about-img img { width: 100%; display: block; border-radius: 10px; }
+    .about-text h2 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      color: var(--color-dark);
+      margin-bottom: 1rem;
+    }
+    .about-text p { color: var(--color-muted); margin-bottom: 1rem; line-height: 1.8; }
+    .about-features {
+      list-style: none;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .6rem;
+      margin-top: 1.5rem;
+    }
+    .about-features li {
+      font-size: .9rem;
+      padding-left: 1.3rem;
+      position: relative;
+      color: var(--color-text);
+    }
+    .about-features li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--color-accent);
+      font-weight: 700;
+    }
+
+    /* ── CONTACT ── */
+    .contact { background: var(--color-dark); color: var(--color-white); }
+    .contact .section-title { color: var(--color-white); }
+    .contact .section-desc { color: rgba(255,255,255,.6); }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .contact-info { display: flex; flex-direction: column; justify-content: center; gap: 1.8rem; }
+    .contact-item { display: flex; align-items: flex-start; gap: 1rem; }
+    .contact-item-icon {
+      width: 44px; height: 44px;
+      background: rgba(201,169,110,.15);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-size: 1.2rem;
+    }
+    .contact-item h4 { font-size: .85rem; font-weight: 600; color: var(--color-accent); margin-bottom: .2rem; letter-spacing: .5px; text-transform: uppercase; }
+    .contact-item p { color: rgba(255,255,255,.75); font-size: .95rem; }
+    .contact-item a { color: rgba(255,255,255,.75); text-decoration: none; transition: color .2s; }
+    .contact-item a:hover { color: var(--color-accent); }
+    .contact-map { border-radius: 10px; overflow: hidden; min-height: 300px; }
+    .contact-map iframe { width: 100%; height: 100%; min-height: 300px; border: none; }
+
+    /* ── FOOTER ── */
+    .footer {
+      background: #141425;
+      padding: 2rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .footer-logo {
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      color: var(--color-white);
+      font-weight: 600;
+    }
+    .footer-copy { color: rgba(255,255,255,.4); font-size: .82rem; }
+    .footer-copy a { color: rgba(255,255,255,.55); text-decoration: none; }
+    .footer-copy a:hover { color: var(--color-accent); }
+
+    /* ── MOBILE ── */
+    @media (max-width: 900px) {
+      .about-grid, .contact-grid { grid-template-columns: 1fr; }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+      .gallery-grid a:first-child { grid-column: span 2; }
+    }
+    @media (max-width: 700px) {
+      .nav { padding: .8rem 1.5rem; }
+      .nav.scrolled { padding: .6rem 1.5rem; }
+      .nav-links { 
+        display: none; flex-direction: column; position: absolute; top: 100%; left: 0; right: 0;
+        background: rgba(26,26,46,.97); padding: 1.5rem; gap: 1.2rem;
       }
-    </style>
-  </head>
-  <body>
-    <main>
-      <h1>Welcome to Junior Apartments</h1>
-      <p>
-        This is the official static website for Junior Apartments.
+      .nav-links.open { display: flex; }
+      .nav-toggle { display: block; }
+      section { padding: 4rem 1.2rem; }
+      .gallery-grid { grid-template-columns: 1fr 1fr; }
+      .gallery-grid a:first-child { grid-column: span 2; }
+      .about-features { grid-template-columns: 1fr; }
+      .footer { flex-direction: column; text-align: center; padding: 2rem 1.5rem; }
+    }
+
+    /* ── Lightbox ── */
+    .lightbox {
+      display: none; position: fixed; inset: 0; z-index: 200;
+      background: rgba(0,0,0,.9); align-items: center; justify-content: center;
+      cursor: zoom-out;
+    }
+    .lightbox.active { display: flex; }
+    .lightbox img { max-width: 90vw; max-height: 90vh; border-radius: 6px; cursor: default; }
+    .lightbox-close {
+      position: absolute; top: 1.5rem; right: 1.5rem;
+      background: none; border: none; color: #fff; font-size: 2rem; cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav" id="nav">
+    <a href="#" class="nav-logo">Junior Apartments</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#hub">Tenant Hub</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#listings">Listings</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="https://login.placeholder.example.com" class="nav-login" target="_blank" rel="noopener">Tenant Login</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <p class="hero-tagline">Seattle's Central District</p>
+      <h1 class="hero-title">Welcome Home to Junior Apartments</h1>
+      <p class="hero-sub">Modern living in the heart of Seattle. Your neighborhood. Your community. Your home.</p>
+      <div class="hero-buttons">
+        <a href="https://login.placeholder.example.com" class="btn btn-primary" target="_blank" rel="noopener">Tenant Portal</a>
+        <a href="#listings" class="btn btn-outline">View Listings</a>
+      </div>
+    </div>
+    <div class="scroll-indicator">
+      <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+    </div>
+  </section>
+
+  <!-- TENANT HUB QUICK LINKS -->
+  <section class="quick-links" id="hub">
+    <div class="section-header">
+      <p class="section-label">Tenant Hub</p>
+      <h2 class="section-title">Everything You Need</h2>
+      <p class="section-desc">Quick access to manage your home, pay rent, and stay connected.</p>
+    </div>
+    <div class="ql-grid">
+      <a href="https://login.placeholder.example.com" class="ql-card" target="_blank" rel="noopener">
+        <div class="ql-icon">🔑</div>
+        <h3>Pay Rent</h3>
+        <p>Log in to your tenant portal to make payments securely online.</p>
+      </a>
+      <a href="https://login.placeholder.example.com" class="ql-card" target="_blank" rel="noopener">
+        <div class="ql-icon">🔧</div>
+        <h3>Maintenance Request</h3>
+        <p>Submit and track maintenance requests through your portal.</p>
+      </a>
+      <a href="#listings" class="ql-card">
+        <div class="ql-icon">🏠</div>
+        <h3>Available Units</h3>
+        <p>Browse current openings and floor plans at Junior Apartments.</p>
+      </a>
+      <a href="#contact" class="ql-card">
+        <div class="ql-icon">📞</div>
+        <h3>Contact Management</h3>
+        <p>Reach out for tours, inquiries, or general questions.</p>
+      </a>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="gallery-section" id="gallery">
+    <div class="section-header">
+      <p class="section-label">Gallery</p>
+      <h2 class="section-title">See Your Future Home</h2>
+      <p class="section-desc">Take a peek inside Junior Apartments and imagine life here.</p>
+    </div>
+    <div class="gallery-grid">
+      <a href="img/2288388_1_0.jpg" data-lightbox><img src="img/2288388_1_0.jpg" alt="Junior Apartments interior 1" loading="lazy" /></a>
+      <a href="img/2288388_2_0.jpg" data-lightbox><img src="img/2288388_2_0.jpg" alt="Junior Apartments interior 2" loading="lazy" /></a>
+      <a href="img/2288388_3_0.jpg" data-lightbox><img src="img/2288388_3_0.jpg" alt="Junior Apartments interior 3" loading="lazy" /></a>
+      <a href="img/2288388_4_0.jpg" data-lightbox><img src="img/2288388_4_0.jpg" alt="Junior Apartments interior 4" loading="lazy" /></a>
+      <a href="img/2288388_5_0.jpg" data-lightbox><img src="img/2288388_5_0.jpg" alt="Junior Apartments interior 5" loading="lazy" /></a>
+      <a href="img/2288388_6_0.jpg" data-lightbox><img src="img/2288388_6_0.jpg" alt="Junior Apartments interior 6" loading="lazy" /></a>
+      <a href="img/2288388_7_0.jpg" data-lightbox><img src="img/2288388_7_0.jpg" alt="Junior Apartments interior 7" loading="lazy" /></a>
+      <a href="img/2288388_8_0.jpg" data-lightbox><img src="img/2288388_8_0.jpg" alt="Junior Apartments interior 8" loading="lazy" /></a>
+    </div>
+  </section>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="Enlarged view" />
+  </div>
+
+  <!-- LISTINGS -->
+  <section class="listings" id="listings">
+    <div class="section-header">
+      <p class="section-label">Availability</p>
+      <h2 class="section-title">Available Listings</h2>
+      <p class="section-desc">See what's currently available at Junior Apartments.</p>
+    </div>
+    <div class="listings-embed">
+      <iframe src="https://guidemanagement.appfolio.com/listings?&filters%5Bproperty_list%5D=Junior" title="Junior Apartments Available Listings" loading="lazy"></iframe>
+      <p class="listings-note">
+        Having trouble viewing? <a href="https://guidemanagement.appfolio.com/listings?&filters%5Bproperty_list%5D=Junior" target="_blank" rel="noopener">Open listings in a new tab &rarr;</a>
       </p>
-      <p class="domain">Domain: junior.apartments</p>
-    </main>
-  </body>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="about-grid">
+      <div class="about-img">
+        <img src="img/junior_apartments_street.png" alt="Junior Apartments street view" loading="lazy" />
+      </div>
+      <div class="about-text">
+        <p class="section-label">About</p>
+        <h2>Living in the Heart of the Central District</h2>
+        <p>Junior Apartments is located at 507 22nd Ave in Seattle's vibrant Central District — one of the city's most culturally rich and connected neighborhoods. Enjoy walkable access to local dining, parks, and public transit.</p>
+        <p>Managed by Guide Management, we're dedicated to providing a comfortable and responsive living experience for every resident.</p>
+        <ul class="about-features">
+          <li>Central District location</li>
+          <li>On-site laundry</li>
+          <li>Responsive maintenance</li>
+          <li>Online rent payments</li>
+          <li>Near public transit</li>
+          <li>Walkable neighborhood</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <div class="section-header">
+      <p class="section-label">Get in Touch</p>
+      <h2 class="section-title">Contact Us</h2>
+      <p class="section-desc">Schedule a tour or ask us anything — we'd love to hear from you.</p>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <div class="contact-item">
+          <div class="contact-item-icon">📍</div>
+          <div>
+            <h4>Address</h4>
+            <p>507 22nd Ave<br>Seattle, WA 98122</p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon">📱</div>
+          <div>
+            <h4>Tours &amp; Inquiries</h4>
+            <p><a href="tel:+12067452811">(206) 745-2811</a></p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon">🕐</div>
+          <div>
+            <h4>Office Hours</h4>
+            <p>Mon – Fri: 9 AM – 5 PM<br>Sat: By appointment</p>
+          </div>
+        </div>
+      </div>
+      <div class="contact-map">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2690.0!2d-122.3025!3d47.6065!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2s507+22nd+Ave%2C+Seattle%2C+WA+98122!5e0!3m2!1sen!2sus!4v1"
+          title="Junior Apartments on Google Maps"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-logo">Junior Apartments</div>
+    <div class="footer-copy">
+      &copy; 2026 Junior Apartments. 507 22nd Ave, Seattle, WA 98122 &nbsp;|&nbsp;
+      <a href="tel:+12067452811">(206) 745-2811</a> &nbsp;|&nbsp;
+      <a href="https://login.placeholder.example.com" target="_blank" rel="noopener">Tenant Login</a>
+    </div>
+  </footer>
+
+  <script>
+    // Navbar scroll effect
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    // Mobile toggle
+    const toggle = document.getElementById('navToggle');
+    const links = document.getElementById('navLinks');
+    toggle.addEventListener('click', () => links.classList.toggle('open'));
+    links.addEventListener('click', (e) => {
+      if (e.target.tagName === 'A') links.classList.remove('open');
+    });
+
+    // Lightbox
+    const lightbox = document.getElementById('lightbox');
+    const lbImg = lightbox.querySelector('img');
+    document.querySelectorAll('[data-lightbox]').forEach(a => {
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        lbImg.src = a.href;
+        lbImg.alt = a.querySelector('img')?.alt || '';
+        lightbox.classList.add('active');
+      });
+    });
+    lightbox.addEventListener('click', (e) => {
+      if (e.target !== lbImg) lightbox.classList.remove('active');
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') lightbox.classList.remove('active');
+    });
+  </script>
+</body>
 </html>
